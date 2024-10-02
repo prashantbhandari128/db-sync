@@ -1,7 +1,9 @@
-﻿namespace DatabaseSync.Business.Service.Interface
+﻿using DatabaseSync.Business.Result;
+
+namespace DatabaseSync.Business.Service.Interface
 {
     public interface ISyncService
     {
-        Task SyncDataAsync();
+        Task<SyncProcessResult> SyncDataAsync();
     }
 }

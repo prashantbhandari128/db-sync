@@ -37,6 +37,7 @@
         private void InitializeComponent()
         {
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
             lblSyncInterval = new Label();
             btnManualSync = new Button();
@@ -54,12 +55,13 @@
             // 
             lblSyncInterval.Anchor = AnchorStyles.Right;
             lblSyncInterval.AutoSize = true;
-            lblSyncInterval.Font = new Font("Arial", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblSyncInterval.Location = new Point(140, 16);
+            lblSyncInterval.Font = new Font("Arial", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSyncInterval.ForeColor = Color.Black;
+            lblSyncInterval.Location = new Point(94, 16);
             lblSyncInterval.Name = "lblSyncInterval";
-            lblSyncInterval.Size = new Size(160, 17);
+            lblSyncInterval.Size = new Size(206, 18);
             lblSyncInterval.TabIndex = 0;
-            lblSyncInterval.Text = "Sync Interval (in Min):";
+            lblSyncInterval.Text = "Insert Sync Interval (in Min):";
             // 
             // btnManualSync
             // 
@@ -79,11 +81,6 @@
             // 
             dataGridCustomers.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridCustomers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridCustomers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            tableLayoutPanel.SetColumnSpan(dataGridCustomers, 3);
-            dataGridCustomers.Location = new Point(3, 53);
-            dataGridCustomers.Name = "dataGridCustomers";
-            dataGridCustomers.ReadOnly = true;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = SystemColors.ActiveCaptionText;
             dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
@@ -91,7 +88,20 @@
             dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridCustomers.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridCustomers.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridCustomers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            tableLayoutPanel.SetColumnSpan(dataGridCustomers, 3);
+            dataGridCustomers.Location = new Point(3, 53);
+            dataGridCustomers.Name = "dataGridCustomers";
+            dataGridCustomers.ReadOnly = true;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.ActiveCaptionText;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.Info;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridCustomers.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridCustomers.RowHeadersWidth = 51;
             dataGridCustomers.Size = new Size(1007, 371);
             dataGridCustomers.TabIndex = 3;

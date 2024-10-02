@@ -37,13 +37,21 @@ namespace DatabaseSync.View.Window
 
         private async Task SyncCommand()
         {
-            this.Text = $"Database-Sync [ Syncronization Started ]";
+            this.Text = $"Database-Sync [ Synchronization Started ]";
             btnManualSync.Enabled = false;
-            await _syncService.SyncDataAsync();
+            var result = await _syncService.SyncDataAsync();
             await RenderCustomers();
             await RenderLog();
             btnManualSync.Enabled = true;
-            this.Text = $"Database-Sync [ Syncronized : {DateTime.Now}]";
+            if (result.Status)
+            {
+                this.Text = $"Database-Sync [ Synchronized : {DateTime.Now}]";
+            }
+            else
+            {
+                this.Text = $"Database-Sync [ Synchronization Failed : {DateTime.Now}]";
+                MessageBox.Show(result.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async Task RenderCustomers()
@@ -64,12 +72,16 @@ namespace DatabaseSync.View.Window
 
             if (intervalMinutes > 0)
             {
+                lblSyncInterval.Text = $"Automatic Sync [{intervalMinutes} Min]:";
+                lblSyncInterval.ForeColor = Color.DarkGreen;
                 // Set the timer interval to the specified minutes (convert minutes to milliseconds)
                 _syncTimer.Interval = intervalMinutes * 60 * 1000;
                 _syncTimer.Start();
             }
             else
             {
+                lblSyncInterval.Text = "Insert Sync Interval (in Min):";
+                lblSyncInterval.ForeColor = Color.Black;
                 _syncTimer.Stop();
             }
         }

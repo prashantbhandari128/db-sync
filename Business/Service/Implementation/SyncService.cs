@@ -1,4 +1,5 @@
-﻿using DatabaseSync.Business.Service.Interface;
+﻿using DatabaseSync.Business.Result;
+using DatabaseSync.Business.Service.Interface;
 using DatabaseSync.Persistence.UnitOfWork.Interface;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ namespace DatabaseSync.Business.Service.Implementation
             _logService = logService;
         }
 
-        public async Task SyncDataAsync()
+        public async Task<SyncProcessResult> SyncDataAsync()
         {
             using(var transaction = _localUnitOfWork.BeginTransaction())
             {
@@ -107,11 +108,13 @@ namespace DatabaseSync.Business.Service.Implementation
                         }
                     }
                     await transaction.CommitAsync();
+                    return new SyncProcessResult(true, "Synchronization Performed Successfully.");
                 }
                 catch (Exception ex)
                 {
+                    await _logService.SaveLogAsync($"Synchronization failed: {ex.Message}");
                     await transaction.RollbackAsync();
-                    MessageBox.Show($"Error: {ex.Message}");
+                    return new SyncProcessResult(false, ex.Message);
                 }
             }
         }
