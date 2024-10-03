@@ -91,7 +91,7 @@ namespace DatabaseSync
         {
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<ILogService, LogService>();
-            services.AddTransient<ISyncService, SyncService>();
+            services.AddTransient<ISynchronizationService, SynchronizationService>();
         }
         //--------------------------------------------------------------------------------------
     }

@@ -14,6 +14,7 @@
         private System.Windows.Forms.ListBox lstSyncLog;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.NumericUpDown inputSyncInterval;
+        private System.Windows.Forms.Timer syncTimer;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -36,6 +37,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Home));
@@ -46,6 +48,7 @@
             lstSyncLog = new ListBox();
             tableLayoutPanel = new TableLayoutPanel();
             inputSyncInterval = new NumericUpDown();
+            syncTimer = new System.Windows.Forms.Timer(components);
             ((System.ComponentModel.ISupportInitialize)dataGridCustomers).BeginInit();
             tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)inputSyncInterval).BeginInit();
@@ -188,5 +191,6 @@
         }
 
         #endregion
+
     }
 }

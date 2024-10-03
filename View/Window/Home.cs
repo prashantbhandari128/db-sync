@@ -1,4 +1,5 @@
-﻿using DatabaseSync.Business.Service.Interface;
+﻿using DatabaseSync.Business.Result;
+using DatabaseSync.Business.Service.Interface;
 
 namespace DatabaseSync.View.Window
 {
@@ -6,22 +7,20 @@ namespace DatabaseSync.View.Window
     {
         private readonly ICustomerService _customerService;
         private readonly ILogService _logService;
-        private readonly ISyncService _syncService;
-        private System.Windows.Forms.Timer _syncTimer;
+        private readonly ISynchronizationService _synchronizationService;
 
-        public Home(ICustomerService customerService, ILogService logService, ISyncService syncService)
+        public Home(ICustomerService customerService, ILogService logService, ISynchronizationService synchronizationService)
         {
             _customerService = customerService;
             _logService = logService;
-            _syncService = syncService;
+            _synchronizationService = synchronizationService;
             InitializeComponent();
             InitializeTimer();
         }
 
         private void InitializeTimer()
         {
-            _syncTimer = new System.Windows.Forms.Timer();
-            _syncTimer.Tick += async (s, e) => await SyncCommand();
+            syncTimer.Tick += async (s, e) => await SyncCommand();
         }
 
         private async void Home_Load(object sender, EventArgs e)
@@ -30,27 +29,29 @@ namespace DatabaseSync.View.Window
             await RenderLog();
         }
 
-        private async void btnManualSync_Click(object sender, EventArgs e)
-        {
-            await SyncCommand();
-        }
+        private async void btnManualSync_Click(object sender, EventArgs e) => await SyncCommand();
 
-        private async Task SyncCommand()
+        private void inputSyncInterval_ValueChanged(object sender, EventArgs e)
         {
-            this.Text = $"Database-Sync [ Synchronization Started ]";
-            btnManualSync.Enabled = false;
-            var result = await _syncService.SyncDataAsync();
-            await RenderCustomers();
-            await RenderLog();
-            btnManualSync.Enabled = true;
-            if (result.Status)
+            int intervalMinutes = (int)inputSyncInterval.Value;
+
+            if (intervalMinutes > 0)
             {
-                this.Text = $"Database-Sync [ Synchronized : {DateTime.Now.ToString("yyyy-M-d h:mm:ss tt")}]";
+                if (intervalMinutes > 1440) 
+                {
+                    MessageBox.Show("Maximum allowed time is 24 hours (1440 minutes).", "Invalid Interval", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                lblSyncInterval.Text = $"Automatic Sync [{intervalMinutes} Min]:";
+                lblSyncInterval.ForeColor = Color.DarkGreen;
+                // Set the timer interval to the specified minutes (convert minutes to milliseconds)
+                syncTimer.Interval = intervalMinutes * 60 * 1000;
+                syncTimer.Start();
             }
             else
             {
-                this.Text = $"Database-Sync [ Synchronization Failed : {DateTime.Now.ToString("yyyy-M-d h:mm:ss tt")}]";
-                MessageBox.Show(result.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                lblSyncInterval.Text = "Insert Sync Interval (in Min):";
+                lblSyncInterval.ForeColor = Color.Black;
+                syncTimer.Stop();
             }
         }
 
@@ -66,23 +67,37 @@ namespace DatabaseSync.View.Window
             lstSyncLog.Refresh();
         }
 
-        private void inputSyncInterval_ValueChanged(object sender, EventArgs e)
+        private async Task SyncCommand()
         {
-            int intervalMinutes = (int)inputSyncInterval.Value;
+            try
+            {
+                this.Text = "Database-Sync [ Synchronization Started ]";
+                btnManualSync.Enabled = false;
 
-            if (intervalMinutes > 0)
-            {
-                lblSyncInterval.Text = $"Automatic Sync [{intervalMinutes} Min]:";
-                lblSyncInterval.ForeColor = Color.DarkGreen;
-                // Set the timer interval to the specified minutes (convert minutes to milliseconds)
-                _syncTimer.Interval = intervalMinutes * 60 * 1000;
-                _syncTimer.Start();
+                SynchronizationProcessResult result = await _synchronizationService.SynchronizeDatabaseAsync();
+
+                if (result.Status)
+                {
+                    this.Text = result.ChangedLocally
+                        ? $"Database-Sync [ Synchronized: {DateTime.Now.ToString("yyyy-M-d h:mm:ss tt")} ] | Updated"
+                        : $"Database-Sync [ Synchronized: {DateTime.Now.ToString("yyyy-M-d h:mm:ss tt")} ] | Already Up to Date";
+                }
+                else
+                {
+                    this.Text = $"Database-Sync [ Synchronization Failed: {DateTime.Now.ToString("yyyy-M-d h:mm:ss tt")} ]";
+                    MessageBox.Show(result.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                await RenderCustomers();
+                await RenderLog();
             }
-            else
+            catch (Exception ex)
             {
-                lblSyncInterval.Text = "Insert Sync Interval (in Min):";
-                lblSyncInterval.ForeColor = Color.Black;
-                _syncTimer.Stop();
+                MessageBox.Show($"An error occurred during synchronization: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnManualSync.Enabled = true;
             }
         }
     }

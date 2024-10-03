@@ -12,7 +12,7 @@
 - [**Setup Instructions**](#setup-instructions)
   - [Prerequisites](#prerequisites)
   - [Database Setup](#database-setup)
-- [**Screenshots**](#screenshots)
+- [**Screenshot**](#screenshot)
 
 ---
 
@@ -80,35 +80,35 @@ This structure enhances **modularity**, **maintainability**, and **separation of
 *Tables:*
 
 - *Customers*
-  - CustomerID (INT, Primary Key)
-  - Name (VARCHAR(100))
-  - Email (VARCHAR(100))
-  - Phone (VARCHAR(15))
+  - ``CustomerID`` (INT, Primary Key)
+  - ``Name`` (VARCHAR(100))
+  - ``Email`` (VARCHAR(100))
+  - ``Phone`` (VARCHAR(15))
 
 - *Locations*
-  - LocationID (INT, Primary Key)
-  - CustomerID (INT, Foreign Key referencing Customer.CustomerID)
-  - Address (VARCHAR(200))
+  - ``LocationID`` (INT, Primary Key)
+  - ``CustomerID`` (INT, Foreign Key referencing Customer.CustomerID)
+  - ``Address`` (VARCHAR(200))
 
 ### Target Database (SQLite)
 
 *Tables:*
 
 - *Customers*
-  - CustomerID (INT, Primary Key)
-  - Name (VARCHAR(100))
-  - Email (VARCHAR(100))
-  - Phone (VARCHAR(15))
+  - ``CustomerID`` (INT, Primary Key)
+  - ``Name`` (VARCHAR(100))
+  - ``Email`` (VARCHAR(100))
+  - ``Phone`` (VARCHAR(15))
 
 - *Locations*
-  - LocationID (INT, Primary Key)
-  - CustomerID (INT, Foreign Key referencing Customer.CustomerID)
-  - Address (VARCHAR(200))
+  - ``LocationID`` (INT, Primary Key)
+  - ``CustomerID`` (INT, Foreign Key referencing Customer.CustomerID)
+  - ``Address`` (VARCHAR(200))
 
 - *SyncLogs*
-  - SyncLogID (INT, Primary Key, Auto-Increment)
-  - Timestamp (DATETIME)
-  - Message (TEXT)
+  - ``SyncLogID`` (INT, Primary Key, Auto-Increment)
+  - ``Timestamp`` (DATETIME)
+  - ``Message`` (TEXT)
 
 ---
 
@@ -125,11 +125,10 @@ Before you begin, ensure you have the following installed:
 
 ### Database Setup
 
-Run the commands in the **Package Manager Console** on **Visual Studio**:
+Run the commands in the **Nuget Package Manager Console** on **Visual Studio**:
 
 1. **Local Database (SQLite)**
-   - The local database will be created automatically in the user's Local Application Data folder upon the first run of the application. However, you can manage it using [DB Browser for SQLite](https://sqlitebrowser.org/) for any manual operations.
-   - To set up the database schema using Entity Framework Core, navigate to the project directory in your terminal and run the following command:
+   - The local database will be created automatically in the user's Local Application Data folder. However, you can manage it using [DB Browser for SQLite](https://sqlitebrowser.org/) for any manual operations.
      ```bash
      Add-Migration Init -Context LocalDbContext
      Update-Database update -Context LocalDbContext
@@ -137,13 +136,12 @@ Run the commands in the **Package Manager Console** on **Visual Studio**:
 
 2. **Server Database (MSSQL)**
    - Ensure that SQL Server is running on your machine.
-   - To apply the migrations and create/update the database schema, use the following commands:
      ```bash
      Add-Migration Init -Context ServerDbContext
      Update-Database update -Context ServerDbContext
      ```
 ---
 
-## Screenshots
+## Screenshot
 
 ![Database-Sync Home](Assets/Screenshots/db-sync-home.jpeg)
