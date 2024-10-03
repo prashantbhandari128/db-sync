@@ -18,7 +18,7 @@ namespace DatabaseSync.Business.Service.Implementation
         {
             return await _localUnitOfWork.SyncLogs.GetQueryable()
                 .OrderByDescending(x => x.Timestamp)
-                .Select(x => $"{x.Timestamp} : {x.Message}")
+                .Select(x => $"{x.Timestamp.ToLocalTime().ToString("yyyy-M-d h:mm:ss tt")} : {x.Message}")
                 .ToListAsync();
         }
 

@@ -45,11 +45,11 @@ namespace DatabaseSync.View.Window
             btnManualSync.Enabled = true;
             if (result.Status)
             {
-                this.Text = $"Database-Sync [ Synchronized : {DateTime.Now}]";
+                this.Text = $"Database-Sync [ Synchronized : {DateTime.Now.ToString("yyyy-M-d h:mm:ss tt")}]";
             }
             else
             {
-                this.Text = $"Database-Sync [ Synchronization Failed : {DateTime.Now}]";
+                this.Text = $"Database-Sync [ Synchronization Failed : {DateTime.Now.ToString("yyyy-M-d h:mm:ss tt")}]";
                 MessageBox.Show(result.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

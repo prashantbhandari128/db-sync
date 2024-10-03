@@ -13,7 +13,7 @@
         private System.Windows.Forms.Label lblSyncLog;
         private System.Windows.Forms.ListBox lstSyncLog;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
-        private NumericUpDown inputSyncInterval;
+        private System.Windows.Forms.NumericUpDown inputSyncInterval;
 
         /// <summary>
         /// Clean up any resources being used.
