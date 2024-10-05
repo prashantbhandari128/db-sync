@@ -125,7 +125,7 @@ Before you begin, ensure you have the following installed:
 
 ### Database Setup
 
-Run the commands in the **Nuget Package Manager Console** on **Visual Studio**:
+Run the commands in the **NuGet Package Manager Console** on **Visual Studio**:
 
 1. **Local Database (SQLite)**
    - The local database will be created automatically in the user's Local Application Data folder. However, you can manage it using [DB Browser for SQLite](https://sqlitebrowser.org/) for any manual operations.

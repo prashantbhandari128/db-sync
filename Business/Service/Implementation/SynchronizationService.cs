@@ -24,8 +24,9 @@ namespace DatabaseSync.Business.Service.Implementation
             {
                 try
                 {
-                    bool changed = false;
+                    int changes = 0;
                     List<string> loglist = new List<string>();
+
                     // Fetch data from the server
                     var serverCustomers = await _serverUnitOfWork.Customers.ListAsync();
 
@@ -36,7 +37,7 @@ namespace DatabaseSync.Business.Service.Implementation
                         if (localCustomer == null)
                         {
                             // Insert new customer
-                            changed = true;
+                            changes++;
                             await _localUnitOfWork.Customers.InsertAsync(serverCustomer);
                             loglist.Add($"Inserted new customer: {serverCustomer.Name}");
                         }
@@ -46,29 +47,26 @@ namespace DatabaseSync.Business.Service.Implementation
                             bool isCustomerUpdated = false;
                             if (localCustomer.Name != serverCustomer.Name)
                             {
-                                changed = true;
                                 loglist.Add($"CustomerID {serverCustomer.CustomerID}: Name changed from '{localCustomer.Name}' to '{serverCustomer.Name}'");
                                 localCustomer.Name = serverCustomer.Name;
                                 isCustomerUpdated = true;
                             }
                             if (localCustomer.Email != serverCustomer.Email)
                             {
-                                changed = true;
                                 loglist.Add($"CustomerID {serverCustomer.CustomerID}: Email changed from '{localCustomer.Email}' to '{serverCustomer.Email}'");
                                 localCustomer.Email = serverCustomer.Email;
                                 isCustomerUpdated = true;
                             }
                             if (localCustomer.Phone != serverCustomer.Phone)
                             {
-                                changed = true;
                                 loglist.Add($"CustomerID {serverCustomer.CustomerID}: Phone changed from '{localCustomer.Phone}' to '{serverCustomer.Phone}'");
                                 localCustomer.Phone = serverCustomer.Phone;
                                 isCustomerUpdated = true;
                             }
                             if (isCustomerUpdated)
                             {
+                                changes++;
                                 _localUnitOfWork.Customers.Update(localCustomer);
-
                             }
                         }
 
@@ -82,7 +80,7 @@ namespace DatabaseSync.Business.Service.Implementation
                                 if (localLocation == null)
                                 {
                                     // Insert new location
-                                    changed = true;
+                                    changes++;
                                     await _localUnitOfWork.Locations.InsertAsync(serverLocation);
                                     loglist.Add($"Inserted new location: {serverLocation.Address} for CustomerID: {serverCustomer.CustomerID}");
                                 }
@@ -91,7 +89,7 @@ namespace DatabaseSync.Business.Service.Implementation
                                     // Update existing location if changed
                                     if (localLocation.Address != serverLocation.Address)
                                     {
-                                        changed = true;
+                                        changes++;
                                         loglist.Add($"LocationID {serverLocation.LocationID}: Address changed from '{localLocation.Address}' to '{serverLocation.Address}' for CustomerID: {serverCustomer.CustomerID}");
                                         localLocation.Address = serverLocation.Address;
                                         _localUnitOfWork.Locations.Update(localLocation);
@@ -100,15 +98,24 @@ namespace DatabaseSync.Business.Service.Implementation
                             }
                         }
                     }
+
                     int changesSaved = await _localUnitOfWork.CompleteAsync();
-                    if (changesSaved == 0 && !changed)
+                    if (changesSaved == 0 && changes == 0)
                     {
                         await transaction.RollbackAsync();
                         return new SynchronizationProcessResult(true, false, "No Changes Detected During Synchronization.");
                     }
-                    await transaction.CommitAsync();
-                    await _logService.SaveLogsAsync(loglist);
-                    return new SynchronizationProcessResult(true, true, "Synchronization Performed Successfully.");
+                    else if (changesSaved == changes)
+                    {
+                        await transaction.CommitAsync();
+                        await _logService.SaveLogsAsync(loglist);
+                        return new SynchronizationProcessResult(true, true, "Synchronization Performed Successfully.");
+                    }
+                    else
+                    {
+                        await transaction.RollbackAsync();
+                        return new SynchronizationProcessResult(false, false, "Synchronization failed: No changes were saved.");
+                    }
                 }
                 catch (Exception ex)
                 {
