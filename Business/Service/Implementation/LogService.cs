@@ -17,7 +17,7 @@ namespace DatabaseSync.Business.Service.Implementation
         public async Task<List<string>> GetAllSyncLogsForViewAsync()
         {
             return await _localUnitOfWork.SyncLogs.GetQueryable()
-                .OrderByDescending(x => x.Timestamp)
+                .OrderByDescending(x => x.SyncId)
                 .Select(x => $"{x.Timestamp.ToLocalTime().ToString("yyyy-M-d h:mm:ss tt")} : {x.Message}")
                 .ToListAsync();
         }
