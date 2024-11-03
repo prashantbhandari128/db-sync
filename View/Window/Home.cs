@@ -18,10 +18,9 @@ namespace DatabaseSync.View.Window
             InitializeTimer();
         }
 
-        private void InitializeTimer()
-        {
-            syncTimer.Tick += async (s, e) => await SyncCommand();
-        }
+        private void InitializeTimer() => syncTimer.Tick += async (s, e) => await SyncCommand();
+
+        private async void btnManualSync_Click(object sender, EventArgs e) => await SyncCommand();
 
         private async void Home_Load(object sender, EventArgs e)
         {
@@ -29,12 +28,9 @@ namespace DatabaseSync.View.Window
             await RenderLog();
         }
 
-        private async void btnManualSync_Click(object sender, EventArgs e) => await SyncCommand();
-
         private void inputSyncInterval_ValueChanged(object sender, EventArgs e)
         {
             int intervalMinutes = (int)inputSyncInterval.Value;
-
             if (intervalMinutes > 0)
             {
                 if (intervalMinutes > 1440) 
@@ -73,9 +69,7 @@ namespace DatabaseSync.View.Window
             {
                 this.Text = "Database-Sync [ Synchronization Started ]";
                 btnManualSync.Enabled = false;
-
                 SynchronizationProcessResult result = await _synchronizationService.SynchronizeDatabaseAsync();
-
                 if (result.Status)
                 {
                     this.Text = result.ChangedLocally

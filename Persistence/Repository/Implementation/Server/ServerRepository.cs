@@ -48,6 +48,7 @@ namespace DatabaseSync.Persistence.Repository.Implementation.Server
         public IAsyncEnumerable<TEntity> GetAsyncEnumerable() => _context.Set<TEntity>().AsAsyncEnumerable();
 
         public IQueryable<TEntity> GetQueryable() => _context.Set<TEntity>().AsQueryable();
+
         public void Dispose()
         {
             Dispose(true);

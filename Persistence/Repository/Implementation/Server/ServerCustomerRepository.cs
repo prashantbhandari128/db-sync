@@ -8,6 +8,7 @@ namespace DatabaseSync.Persistence.Repository.Implementation.Server
     {
         public ServerCustomerRepository(ServerDbContext context) : base(context)
         {
+
         }
     }
 }

@@ -4,8 +4,8 @@ using DatabaseSync.Persistence.Context;
 using DatabaseSync.View.Window;
 using DatabaseSync.Persistence.Repository.Implementation.Local;
 using DatabaseSync.Persistence.Repository.Implementation.Server;
-using DatabaseSync.Persistence.Repository.Interface.Server;
 using DatabaseSync.Persistence.Repository.Interface.Local;
+using DatabaseSync.Persistence.Repository.Interface.Server;
 using DatabaseSync.Business.Service.Implementation;
 using DatabaseSync.Business.Service.Interface;
 using DatabaseSync.Persistence.UnitOfWork.Interface;
@@ -41,7 +41,8 @@ namespace DatabaseSync
         static IHostBuilder CreateHostBuilder()
         {
             return Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) => {
+                .ConfigureServices((context, services) =>
+                {
                     AddForms(services);
                     AddDatabaseContext(services);
                     AddRepositories(services);
@@ -81,8 +82,8 @@ namespace DatabaseSync
         //--------------------------[ Inject UnitOfWorks Here ]---------------------------------
         static void AddUnitOfWorks(IServiceCollection services)
         {
-            services.AddTransient<ILocalUnitOfWork, LocalUnitOfWork>();
-            services.AddTransient<IServerUnitOfWork, ServerUnitOfWork>();
+            services.AddScoped<ILocalUnitOfWork, LocalUnitOfWork>();
+            services.AddScoped<IServerUnitOfWork, ServerUnitOfWork>();
         }
         //--------------------------------------------------------------------------------------
 

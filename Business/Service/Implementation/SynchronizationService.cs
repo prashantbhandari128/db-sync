@@ -114,7 +114,7 @@ namespace DatabaseSync.Business.Service.Implementation
                     else
                     {
                         await transaction.RollbackAsync();
-                        return new SynchronizationProcessResult(false, false, "Synchronization failed: No changes were saved.");
+                        return new SynchronizationProcessResult(false, false, "Synchronization Failed: No Changes Were Saved.");
                     }
                 }
                 catch (Exception ex)
