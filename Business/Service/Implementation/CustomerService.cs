@@ -24,11 +24,7 @@ namespace DatabaseSync.Business.Service.Implementation
                     Name = x.Name,
                     Email = x.Email,
                     Phone = x.Phone,
-                    Addresses = x.Locations != null
-                        ? string.Join(", ", x.Locations
-                            .Where(l => l.Address != null)
-                            .Select(l => l.Address))
-                        : String.Empty
+                    Addresses = x.Locations != null ? string.Join(", ", x.Locations.Where(l => l.Address != null).Select(l => l.Address)) : String.Empty
                 })
                 .ToListAsync();
         }

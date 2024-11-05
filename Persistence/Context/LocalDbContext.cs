@@ -30,6 +30,7 @@ namespace DatabaseSync.Persistence.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             // Configure Customer entity
             modelBuilder.Entity<Customer>(entity =>
             {

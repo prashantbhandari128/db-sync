@@ -25,6 +25,7 @@ namespace DatabaseSync.Persistence.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             DataSeeder.Seed(modelBuilder);
 
             // Configure Customer entity

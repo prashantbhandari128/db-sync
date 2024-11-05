@@ -8,8 +8,8 @@ using DatabaseSync.Persistence.Repository.Interface.Local;
 using DatabaseSync.Persistence.Repository.Interface.Server;
 using DatabaseSync.Business.Service.Implementation;
 using DatabaseSync.Business.Service.Interface;
-using DatabaseSync.Persistence.UnitOfWork.Interface;
 using DatabaseSync.Persistence.UnitOfWork.Implementation;
+using DatabaseSync.Persistence.UnitOfWork.Interface;
 
 namespace DatabaseSync
 {

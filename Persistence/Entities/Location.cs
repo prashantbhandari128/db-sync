@@ -7,14 +7,11 @@ namespace DatabaseSync.Persistence.Entities
     {
         [Key] 
         public int LocationID { get; set; }
-
         [Required]
         public int CustomerID { get; set; }
-
         [Required]
         [MaxLength(200)]
         public string Address { get; set; } = string.Empty;
-
         [ForeignKey("CustomerID")]
         public Customer? Customer { get; set; }
     }
